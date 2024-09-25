@@ -1,4 +1,4 @@
-# Secret Word 🎮🤔
+# Secret Word ❔
 
 Bem-vindo ao **Secret Word**! Este é um jogo simples e divertido desenvolvido em **React.js**, onde o jogador tenta adivinhar palavras sorteadas letra por letra. A cada acerto, o jogador soma pontos, mas cuidado: você só tem **três tentativas** para errar!
 
