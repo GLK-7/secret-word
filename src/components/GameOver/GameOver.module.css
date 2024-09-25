@@ -1,0 +1,73 @@
+.gameOver h1 {
+  font-size: 3em;
+  font-family: 'Roboto', sans-serif;
+  color: #ffd700; /* Amarelo dourado */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1em;
+}
+
+/* Card de pontuação */
+.scoreCard {
+  background-color: #222831; /* Preto suave */
+  padding: 1em;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4); /* Sombra consistente com o estilo */
+  margin-bottom: 2em;
+  max-width: 400px;
+  border: 3px solid #222831; /* Contorno dourado */
+}
+
+/* Estilo do texto da pontuação */
+.scoreCard h2 {
+  font-size: 1.8em;
+  color: #f1f1f1;
+}
+
+.scoreCard h2 span {
+  font-weight: bold;
+  color: #4caf50; /* Verde para destacar a pontuação */
+}
+
+/* SVG representando o fim de jogo */
+.gameOver svg {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 1.5em;
+  fill: #ffd700; /* Cor dourada */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .gameOver h1 {
+    font-size: 2.5em;
+  }
+
+  .scoreCard h2 {
+    font-size: 1.5em;
+  }
+
+  .gameOver button {
+    font-size: 1em;
+    padding: 0.6em 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .gameOver h1 {
+    font-size: 2em;
+  }
+
+  .scoreCard h2 {
+    font-size: 1.2em;
+  }
+
+  .gameOver button {
+    font-size: 0.9em;
+    padding: 0.5em 1.2em;
+  }
+
+  .gameOver svg {
+    width: 120px;
+    height: 120px;
+  }
+}

@@ -1,0 +1,148 @@
+/* Container da palavra */
+.wordContainer {
+  margin: 1.5em;
+  padding: 1.5em;
+  border: 20px solid #222831;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+
+/* Letras e quadrados em branco */
+.letter,
+.blankSquare {
+  font-size: 70px;
+  line-height: 1.5;
+  border: 3px solid #ffd700; /* Amarelo dourado */
+  height: 100px;
+  width: 100px;
+  text-transform: uppercase;
+  background-color: #222831; /* Preto suave */
+  color: #ffffff;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.05em;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.letter:hover,
+.blankSquare:hover {
+  background-color: #ffd700;
+  color: #222831;
+  transform: translateY(-5px);
+}
+
+/* Container de letras */
+.letterContainer p {
+  margin-bottom: 1.2em;
+  font-size: 1.2em;
+  color: #f1f1f1;
+  text-align: center;
+}
+
+/* Estilizando o formulário */
+.letterContainer form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+/* Entrada de letras */
+.letterContainer input {
+  height: 50px;
+  width: 50px;
+  font-size: 2em;
+  text-align: center;
+  margin-right: 1em;
+  border: 2px solid #ffd700;
+  border-radius: 0px;
+  background-color: #222831;
+  color: #ffffff;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.letterContainer input:focus {
+  border-color: #4caf50;
+  box-shadow: 0px 0px 8px rgba(76, 175, 80, 0.8);
+  outline: none;
+}
+
+/* Título */
+.game h1 {
+  font-size: 3em;
+  font-family: 'Roboto', sans-serif;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.5em;
+}
+
+/* Estilo de pontuação */
+.points span {
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #4caf50;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Dica */
+.tip span {
+  color: #ffd700; /* Amarelo dourado */
+  font-size: 1.2em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background-color: #222831;
+  padding: 0.3em 0.6em;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .game {
+    padding: 1.5em;
+  }
+
+  .game h1 {
+    font-size: 2.5em;
+  }
+
+  .letter,
+  .blankSquare {
+    font-size: 50px;
+    height: 80px;
+    width: 80px;
+  }
+
+  .letterContainer input {
+    height: 40px;
+    width: 40px;
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 480px) {
+  .game h1 {
+    font-size: 2em;
+  }
+
+  .letter,
+  .blankSquare {
+    font-size: 40px;
+    height: 60px;
+    width: 60px;
+  }
+
+  .letterContainer input {
+    height: 35px;
+    width: 35px;
+    font-size: 1.2em;
+  }
+}
