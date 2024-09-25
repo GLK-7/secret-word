@@ -22,7 +22,7 @@ Siga os passos abaixo para rodar o projeto localmente:
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seuusuario/secret-word.git
+   git clone https://github.com/GLK-7/secret-word.git
 2. Acesse o diretório do projeto:
    ```bash  
    cd secret-word
