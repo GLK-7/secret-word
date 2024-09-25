@@ -25,7 +25,7 @@ const Game = ({
       <p className={styles.points}>
         <span>Pontuação: {score}</span>
       </p>
-      <h1>Advinhe a palavra:</h1>
+      <h1>Adivinhe a palavra:</h1>
       <h3 className={styles.tip}>
         Dica sobre a palavra: <span>{pickedCategory}</span>
       </h3>
@@ -42,7 +42,7 @@ const Game = ({
         )}
       </div>
       <div className={styles.letterContainer}>
-        <p>Tente advinhas uma letra da palavra</p>
+        <p>Tente adivinhar uma letra da palavra</p>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
