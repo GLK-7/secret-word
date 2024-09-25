@@ -2,7 +2,7 @@
 
 Bem-vindo ao **Secret Word**! Este é um jogo simples e divertido desenvolvido em **React.js**, onde o jogador tenta adivinhar palavras sorteadas letra por letra. A cada acerto, o jogador soma pontos, mas cuidado: você só tem **três tentativas** para errar!
 
-<img src="./src/assets/preview.PNG" alt="Demonstração do Thoughts" style="border-radius: 10px"/>
+<img src="./src/assets/preview.PNG" alt="Image Preview" style="border-radius: 10px"/>
 
 ## 🚀 Funcionalidades
 
