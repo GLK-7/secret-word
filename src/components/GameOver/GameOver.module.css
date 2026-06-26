@@ -3,8 +3,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
-  padding: 3rem 2.5rem;
+  gap: 1.1rem;
+  padding: 2.8rem 2.5rem;
   max-width: 460px;
   width: 100%;
   background: rgba(255, 255, 255, 0.04);
@@ -19,11 +19,9 @@
 .gameOver::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #ef4444, #a855f7, #06b6d4);
+  background: linear-gradient(90deg, var(--diff-color, #ef4444), #a855f7, #06b6d4);
   background-size: 200% 100%;
   animation: gradient-shift 3s ease infinite;
 }
@@ -31,23 +29,18 @@
 /* Orbs */
 .orb1 {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: 200px; height: 200px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(239,68,68,0.18), transparent 70%);
-  top: -70px;
-  right: -70px;
+  background: radial-gradient(circle, rgba(var(--diff-rgb, 239,68,68), 0.18), transparent 70%);
+  top: -70px; right: -70px;
   pointer-events: none;
 }
-
 .orb2 {
   position: absolute;
-  width: 150px;
-  height: 150px;
+  width: 150px; height: 150px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(168,85,247,0.18), transparent 70%);
-  bottom: -50px;
-  left: -50px;
+  bottom: -50px; left: -50px;
   pointer-events: none;
 }
 
@@ -57,22 +50,18 @@
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 0.2rem;
 }
-
 .rankEmoji {
-  font-size: 4rem;
+  font-size: 3.8rem;
   animation: float 2.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 20px rgba(255,200,50,0.6));
+  filter: drop-shadow(0 0 18px rgba(255,200,50,0.6));
   display: block;
   line-height: 1;
 }
-
 .iconRing {
   position: absolute;
   inset: -12px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.1);
   animation: spin 8s linear infinite;
   background: conic-gradient(
     from 0deg,
@@ -81,14 +70,14 @@
     rgba(6,182,212,0.5),
     rgba(168,85,247,0.5)
   );
-  -webkit-mask: radial-gradient(transparent 60%, black 62%);
-  mask: radial-gradient(transparent 60%, black 62%);
+  -webkit-mask: radial-gradient(transparent 62%, black 64%);
+  mask: radial-gradient(transparent 62%, black 64%);
 }
 
 /* Title */
 .title {
   font-family: 'Poppins', sans-serif;
-  font-size: 2.5rem;
+  font-size: 2.4rem;
   font-weight: 800;
   background: linear-gradient(135deg, #f8fafc, #a855f7);
   -webkit-background-clip: text;
@@ -103,13 +92,38 @@
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 50px;
-  padding: 0.35rem 1.2rem;
+  padding: 0.32rem 1.1rem;
   font-weight: 800;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--rank-color, #a855f7);
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  box-shadow: 0 0 20px color-mix(in srgb, var(--rank-color, #a855f7) 30%, transparent);
+}
+
+/* Difficulty pill */
+.diffPill {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: rgba(var(--diff-rgb, 168, 85, 247), 0.12);
+  border: 1px solid rgba(var(--diff-rgb, 168, 85, 247), 0.3);
+  border-radius: 50px;
+  padding: 0.38rem 1rem;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  font-weight: 600;
+}
+.diffPill strong {
+  color: var(--diff-color, #a855f7);
+}
+.multTag {
+  background: var(--diff-color, #a855f7);
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 900;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Score card */
@@ -117,25 +131,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0,0,0,0.25);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 20px;
-  padding: 1.2rem 2.5rem;
+  padding: 1.1rem 2.5rem;
   width: 100%;
 }
-
 .scoreLabel {
   color: #64748b;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin: 0;
 }
-
 .scoreValue {
   font-family: 'Poppins', sans-serif;
-  font-size: 4rem;
+  font-size: 3.8rem;
   font-weight: 900;
   background: linear-gradient(135deg, #22c55e, #06b6d4);
   -webkit-background-clip: text;
@@ -145,81 +157,70 @@
   margin: 0.1rem 0 0;
   animation: pulse 2s ease-in-out infinite;
 }
-
 .scorePoints {
   color: #475569;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin: 0;
 }
 
-/* Stats row */
+/* Stats */
 .stats {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.2rem;
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 14px;
-  padding: 0.8rem 2rem;
+  padding: 0.75rem 1.5rem;
   width: 100%;
   justify-content: center;
 }
-
 .statItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
+  gap: 0.15rem;
 }
-
 .statNum {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 800;
-  color: #a855f7;
+  color: var(--diff-color, #a855f7);
 }
-
 .statLabel {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: #64748b;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
-
 .statDivider {
-  width: 1px;
-  height: 36px;
+  width: 1px; height: 34px;
   background: rgba(255,255,255,0.1);
 }
 
-/* Retry button */
+/* Retry */
 .retryBtn {
   font-size: 1rem;
   padding: 0 40px;
   height: 54px;
-  margin-top: 0.3rem;
+  width: 100%;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, var(--diff-color, #a855f7), #ec4899) !important;
+  box-shadow: 0 4px 20px rgba(var(--diff-rgb, 168, 85, 247), 0.4) !important;
+}
+.retryBtn:hover {
+  box-shadow: 0 8px 30px rgba(var(--diff-rgb, 168, 85, 247), 0.6) !important;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
-  .gameOver {
-    padding: 2rem 1.5rem;
-    border-radius: 20px;
-  }
-
-  .title {
-    font-size: 2rem;
-  }
-
-  .rankEmoji {
-    font-size: 3rem;
-  }
-
-  .scoreValue {
-    font-size: 3rem;
-  }
+  .gameOver { padding: 2rem 1.4rem; border-radius: 20px; }
+  .title { font-size: 2rem; }
+  .rankEmoji { font-size: 3rem; }
+  .scoreValue { font-size: 3rem; }
+  .stats { gap: 0.9rem; padding: 0.7rem 1rem; }
 }

@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1.1rem;
   padding: 2rem 2.5rem 2.5rem;
   max-width: 640px;
   width: 100%;
@@ -16,24 +16,25 @@
   overflow: hidden;
 }
 
+/* Top colored line adapts to difficulty */
 .game::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 0; left: 0; right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #a855f7, #ec4899, #06b6d4);
+  background: linear-gradient(90deg, var(--diff-color, #a855f7), #ec4899, #06b6d4);
   background-size: 200% 100%;
   animation: gradient-shift 3s ease infinite;
 }
 
-/* Header */
+/* ── Header ── */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .scoreBox {
@@ -43,19 +44,17 @@
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 12px;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.9rem;
 }
-
 .scoreLabel {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: #64748b;
   font-weight: 700;
 }
-
 .scoreValue {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 900;
   background: linear-gradient(135deg, #22c55e, #06b6d4);
   -webkit-background-clip: text;
@@ -64,27 +63,55 @@
   font-family: 'Poppins', sans-serif;
 }
 
+/* Difficulty badge */
+.diffBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(var(--diff-rgb, 168, 85, 247), 0.12);
+  border: 1px solid rgba(var(--diff-rgb, 168, 85, 247), 0.3);
+  border-radius: 50px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.8rem;
+}
+.diffLabel {
+  font-weight: 800;
+  color: var(--diff-color, #a855f7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.75rem;
+}
+.diffMult {
+  background: var(--diff-color, #a855f7);
+  color: #fff;
+  border-radius: 6px;
+  padding: 0 5px;
+  font-size: 0.68rem;
+  font-weight: 900;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Lives */
 .livesBox {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
-
 .heart {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   transition: all 0.3s ease;
-  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.6));
 }
-
 .heartAlive {
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse 1.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(239,68,68,0.6));
 }
-
 .heartDead {
-  filter: grayscale(1) brightness(0.5);
-  transform: scale(0.85);
+  filter: grayscale(1) brightness(0.4);
+  transform: scale(0.8);
 }
 
-/* Category badge */
+/* ── Category badge ── */
 .categoryBadge {
   display: inline-flex;
   align-items: center;
@@ -92,134 +119,169 @@
   background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(236,72,153,0.2));
   border: 1px solid rgba(168,85,247,0.35);
   border-radius: 50px;
-  padding: 0.4rem 1.1rem;
-  font-size: 0.85rem;
+  padding: 0.35rem 1rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: #c084fc;
   letter-spacing: 0.5px;
 }
-
-.categoryEmoji {
-  font-size: 1rem;
-}
-
 .categoryText {
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
+.wordLengthTag {
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 0.1rem 0.55rem;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 700;
+}
 
-/* Title */
+/* ── Title ── */
 .title {
   font-family: 'Poppins', sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #f8fafc;
   margin: 0;
 }
 
-/* Word container */
+/* ── Word container ── */
 .wordContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 1.2rem 1rem;
+  gap: 0.45rem;
+  padding: 1rem 0.8rem;
   background: rgba(0, 0, 0, 0.25);
   border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.07);
   width: 100%;
 }
 
-/* Revealed letter */
 .letter {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 56px;
-  height: 56px;
-  font-size: 1.6rem;
+  width: 52px;
+  height: 52px;
+  font-size: 1.5rem;
   font-weight: 900;
   text-transform: uppercase;
   font-family: 'Poppins', sans-serif;
   border-radius: 12px;
   color: #0f0c29;
-  background: linear-gradient(135deg, #a855f7, #ec4899);
-  box-shadow: 0 4px 15px rgba(168,85,247,0.5);
+  background: linear-gradient(135deg, var(--diff-color, #a855f7), #ec4899);
+  box-shadow: 0 4px 14px rgba(168,85,247,0.45);
   border: 2px solid rgba(255,255,255,0.3);
 }
-
 .letterReveal {
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-/* Blank square */
 .blankSquare {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.3s ease;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid rgba(255,255,255,0.14);
 }
-
 .blankDot {
-  width: 8px;
-  height: 8px;
+  width: 7px; height: 7px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.22);
 }
 
-/* Input section */
+/* ── Hint panel ── */
+.hintPanel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hintToggle {
+  /* override global button */
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(var(--diff-rgb, 168, 85, 247), 0.1);
+  border: 1px dashed rgba(var(--diff-rgb, 168, 85, 247), 0.4);
+  border-radius: 50px;
+  padding: 0.35rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--diff-color, #a855f7);
+  transition: all 0.25s ease;
+  letter-spacing: 0.5px;
+}
+.hintToggle:hover {
+  background: rgba(var(--diff-rgb, 168, 85, 247), 0.2);
+  transform: translateY(-2px);
+}
+
+.hintText {
+  background: rgba(var(--diff-rgb, 168, 85, 247), 0.08);
+  border: 1px solid rgba(var(--diff-rgb, 168, 85, 247), 0.2);
+  border-radius: 12px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  font-style: italic;
+  animation: fadeIn 0.25s ease;
+  margin: 0;
+}
+
+/* ── Input ── */
 .inputSection {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
 }
-
 .inputLabel {
   color: #94a3b8;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
+  margin: 0;
 }
-
 .form {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.7rem;
   align-items: center;
 }
 
 .letterInput {
-  width: 64px;
-  height: 64px;
+  width: 62px; height: 62px;
   font-size: 1.8rem;
   text-align: center;
   text-transform: uppercase;
   font-weight: 800;
   font-family: 'Poppins', sans-serif;
-  background: rgba(255, 255, 255, 0.08);
-  border: 2px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.14);
   border-radius: 16px;
   color: #f8fafc;
   transition: all 0.3s ease;
-  caret-color: #a855f7;
+  caret-color: var(--diff-color, #a855f7);
 }
-
-.letterInput::placeholder {
-  color: rgba(255,255,255,0.2);
-}
-
+.letterInput::placeholder { color: rgba(255,255,255,0.2); }
 .letterInput:focus {
   outline: none;
-  border-color: #a855f7;
-  background: rgba(168, 85, 247, 0.1);
-  box-shadow: 0 0 0 3px rgba(168,85,247,0.25), 0 0 20px rgba(168,85,247,0.3);
+  border-color: var(--diff-color, #a855f7);
+  background: rgba(var(--diff-rgb, 168, 85, 247), 0.1);
+  box-shadow: 0 0 0 3px rgba(var(--diff-rgb, 168, 85, 247), 0.22),
+              0 0 20px rgba(var(--diff-rgb, 168, 85, 247), 0.25);
 }
-
 .shake {
   animation: shake 0.4s ease both;
   border-color: #ef4444 !important;
@@ -227,64 +289,59 @@
 }
 
 .guessButton {
-  height: 64px;
-  padding: 0 2rem;
-  font-size: 0.95rem;
+  height: 62px;
+  padding: 0 1.8rem;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, var(--diff-color, #a855f7), #ec4899) !important;
 }
 
-/* Wrong letters section */
+/* ── Wrong letters ── */
 .wrongSection {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
-
 .wrongLabel {
   color: #64748b;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
+  margin: 0;
 }
-
 .wrongLetters {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
-
 .noWrong {
   color: #475569;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-style: italic;
 }
-
 .wrongBadge {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: 34px;
-  height: 34px;
+  width: 32px; height: 32px;
   border-radius: 8px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 800;
   font-family: 'Poppins', sans-serif;
-  background: rgba(239, 68, 68, 0.15);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.35);
   color: #f87171;
-  transition: all 0.3s ease;
 }
-
 .wrongNew {
   animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
-  background: rgba(239, 68, 68, 0.3);
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+  background: rgba(239,68,68,0.28);
+  box-shadow: 0 0 10px rgba(239,68,68,0.38);
 }
 
-/* Progress bar */
+/* ── Progress ── */
 .progressBar {
   width: 100%;
   height: 6px;
@@ -292,55 +349,35 @@
   border-radius: 3px;
   overflow: hidden;
 }
-
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, #a855f7, #06b6d4);
+  background: linear-gradient(90deg, var(--diff-color, #a855f7), #06b6d4);
   border-radius: 3px;
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .progressLabel {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   color: #64748b;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  margin-top: -0.5rem;
+  letter-spacing: 0.3px;
+  margin-top: -0.4rem;
 }
 
-/* Responsive */
+/* ── Responsive ── */
 @media (max-width: 480px) {
   .game {
-    padding: 1.5rem 1.2rem;
+    padding: 1.4rem 1.2rem 1.8rem;
     border-radius: 20px;
-    gap: 1rem;
+    gap: 0.9rem;
   }
-
-  .letter,
-  .blankSquare {
-    width: 42px;
-    height: 42px;
-    font-size: 1.2rem;
-    border-radius: 10px;
+  .letter, .blankSquare {
+    width: 40px; height: 40px;
+    font-size: 1.1rem;
+    border-radius: 9px;
   }
-
-  .letterInput {
-    width: 54px;
-    height: 54px;
-    font-size: 1.5rem;
-  }
-
-  .guessButton {
-    height: 54px;
-    padding: 0 1.2rem;
-    font-size: 0.85rem;
-  }
-
-  .title {
-    font-size: 1.3rem;
-  }
-
-  .scoreValue {
-    font-size: 1.3rem;
-  }
+  .letterInput { width: 54px; height: 54px; font-size: 1.5rem; }
+  .guessButton { height: 54px; padding: 0 1.1rem; font-size: 0.82rem; }
+  .title { font-size: 1.3rem; }
+  .scoreValue { font-size: 1.3rem; }
+  .header { gap: 0.4rem; }
 }

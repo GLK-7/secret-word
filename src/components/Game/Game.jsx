@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './Game.module.css';
 
-const MAX_GUESSES = 3;
-
 const Game = ({
   verifyLetter,
   pickedWord,
@@ -12,18 +10,22 @@ const Game = ({
   wrongLetters,
   guesses,
   score,
+  difficulty,
+  wordsGuessed,
 }) => {
   const [letter, setLetter] = useState('');
   const [shakeInput, setShakeInput] = useState(false);
   const [lastWrong, setLastWrong] = useState(null);
+  const [showHint, setShowHint] = useState(false);
   const letterInputRef = useRef(null);
 
-  // Focus input on mount
+  const maxLives = difficulty.lives;
+
   useEffect(() => {
     letterInputRef.current?.focus();
   }, []);
 
-  // Detect new wrong letter to trigger shake
+  // Shake on new wrong letter
   useEffect(() => {
     if (wrongLetters.length > 0) {
       const newest = wrongLetters[wrongLetters.length - 1];
@@ -34,6 +36,11 @@ const Game = ({
     }
   }, [wrongLetters]);
 
+  // reset hint panel when word changes
+  useEffect(() => {
+    setShowHint(false);
+  }, [letters]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     verifyLetter(letter);
@@ -41,34 +48,55 @@ const Game = ({
     setLetter('');
   };
 
-  // Build heart/life icons
-  const livesArray = Array.from({ length: MAX_GUESSES }, (_, i) => i < guesses);
-
-  // Category emoji map
   const categoryEmoji = {
-    carro: '🚗',
-    fruta: '🍎',
-    corpo: '🫀',
-    computador: '💻',
-    programação: '⌨️',
-    alimento: '🍽️',
+    carro: '🚗', fruta: '🍎', corpo: '🫀',
+    computador: '💻', programação: '⌨️', alimento: '🍽️',
   };
-  const emoji = categoryEmoji[pickedCategory] ?? '🎯';
+  const catEmoji = categoryEmoji[pickedCategory] ?? '🎯';
+
+  const uniqueLetters = [...new Set(letters)];
+  const foundCount = guessedLetters.filter((l) => letters.includes(l)).length;
+  const progress = uniqueLetters.length > 0 ? (foundCount / uniqueLetters.length) * 100 : 0;
+
+  // Build lives array
+  const livesArray = Array.from({ length: maxLives }, (_, i) => i < guesses);
+
+  // Category detail hint (medium+)
+  const categoryHints = {
+    carro: 'Peça ou componente de veículo',
+    fruta: 'Fruta encontrada em feiras',
+    corpo: 'Parte ou órgão do corpo humano',
+    computador: 'Componente ou periférico de PC',
+    programação: 'Linguagem, framework ou ferramenta dev',
+    alimento: 'Alimento ou ingrediente culinário',
+  };
 
   return (
-    <div className={styles.game}>
-      {/* Header strip */}
+    <div
+      className={styles.game}
+      style={{ '--diff-color': difficulty.color, '--diff-rgb': difficulty.colorRgb }}
+    >
+      {/* Top bar */}
       <div className={styles.header}>
         <div className={styles.scoreBox}>
           <span className={styles.scoreLabel}>Pontuação</span>
           <span className={styles.scoreValue}>{score}</span>
         </div>
 
+        {/* Difficulty badge */}
+        <div className={styles.diffBadge}>
+          <span>{difficulty.emoji}</span>
+          <span className={styles.diffLabel}>{difficulty.label}</span>
+          <span className={styles.diffMult}>×{difficulty.scoreMultiplier}</span>
+        </div>
+
+        {/* Lives */}
         <div className={styles.livesBox}>
           {livesArray.map((alive, i) => (
             <span
               key={i}
               className={`${styles.heart} ${alive ? styles.heartAlive : styles.heartDead}`}
+              title={alive ? 'Vida restante' : 'Vida perdida'}
             >
               {alive ? '❤️' : '🖤'}
             </span>
@@ -78,8 +106,11 @@ const Game = ({
 
       {/* Category badge */}
       <div className={styles.categoryBadge}>
-        <span className={styles.categoryEmoji}>{emoji}</span>
+        <span>{catEmoji}</span>
         <span className={styles.categoryText}>{pickedCategory}</span>
+        {difficulty.showWordLength && (
+          <span className={styles.wordLengthTag}>{letters.length} letras</span>
+        )}
       </div>
 
       <h1 className={styles.title}>Adivinhe a palavra</h1>
@@ -98,6 +129,24 @@ const Game = ({
           )
         )}
       </div>
+
+      {/* Hint panel — easy & medium only */}
+      {difficulty.showCategoryHint && (
+        <div className={styles.hintPanel}>
+          <button
+            type="button"
+            className={styles.hintToggle}
+            onClick={() => setShowHint((v) => !v)}
+          >
+            💡 {showHint ? 'Ocultar dica' : 'Ver dica'}
+          </button>
+          {showHint && (
+            <p className={styles.hintText}>
+              {categoryHints[pickedCategory] ?? `Categoria: ${pickedCategory}`}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Input section */}
       <div className={styles.inputSection}>
@@ -141,24 +190,12 @@ const Game = ({
         </div>
       </div>
 
-      {/* Progress bar */}
+      {/* Progress */}
       <div className={styles.progressBar}>
-        <div
-          className={styles.progressFill}
-          style={{
-            width: `${
-              letters.length > 0
-                ? (guessedLetters.filter((l) => letters.includes(l)).length /
-                    [...new Set(letters)].length) *
-                  100
-                : 0
-            }%`,
-          }}
-        />
+        <div className={styles.progressFill} style={{ width: `${progress}%` }} />
       </div>
       <p className={styles.progressLabel}>
-        {guessedLetters.filter((l) => letters.includes(l)).length} /{' '}
-        {[...new Set(letters)].length} letras encontradas
+        {foundCount} / {uniqueLetters.length} letras únicas • {wordsGuessed} palavra{wordsGuessed !== 1 ? 's' : ''} acertada{wordsGuessed !== 1 ? 's' : ''}
       </p>
     </div>
   );

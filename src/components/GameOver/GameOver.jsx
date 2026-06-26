@@ -1,46 +1,38 @@
 import { useEffect, useRef } from 'react';
 import styles from './GameOver.module.css';
 
-const GameOver = ({ retry, score }) => {
+const GameOver = ({ retry, score, difficulty, wordsGuessed }) => {
   const containerRef = useRef(null);
 
-  // Confetti burst on mount
+  // Confetti burst
   useEffect(() => {
-    const colors = ['#a855f7', '#ec4899', '#06b6d4', '#facc15', '#22c55e'];
+    const colors = [difficulty.color, '#ec4899', '#06b6d4', '#facc15', '#f8fafc'];
     const container = containerRef.current;
     if (!container) return;
-
-    const PIECE_COUNT = 60;
     const pieces = [];
 
-    for (let i = 0; i < PIECE_COUNT; i++) {
+    for (let i = 0; i < 65; i++) {
       const piece = document.createElement('div');
-      piece.className = styles.confetti;
-
       const color = colors[Math.floor(Math.random() * colors.length)];
       const isCircle = Math.random() > 0.5;
       const size = Math.random() * 8 + 5;
-
       piece.style.cssText = `
         position: absolute;
         width: ${size}px;
-        height: ${isCircle ? size : size * 0.6}px;
+        height: ${isCircle ? size : size * 0.55}px;
         background: ${color};
         border-radius: ${isCircle ? '50%' : '2px'};
         left: ${Math.random() * 100}%;
-        top: -10px;
-        opacity: 1;
+        top: -12px;
         pointer-events: none;
         transform: rotate(${Math.random() * 360}deg);
         animation: confettiFall ${1.5 + Math.random() * 2}s ease-in ${Math.random() * 0.8}s forwards;
       `;
-
       container.appendChild(piece);
       pieces.push(piece);
     }
-
     return () => pieces.forEach((p) => p.remove());
-  }, []);
+  }, [difficulty.color]);
 
   const getRank = (s) => {
     if (s >= 800) return { emoji: '👑', label: 'Mestre!', color: '#facc15' };
@@ -51,14 +43,18 @@ const GameOver = ({ retry, score }) => {
   };
 
   const rank = getRank(score);
+  const ptsPerWord = Math.round(100 * difficulty.scoreMultiplier);
 
   return (
-    <div className={styles.gameOver} ref={containerRef}>
-      {/* Glow orbs */}
+    <div
+      className={styles.gameOver}
+      ref={containerRef}
+      style={{ '--diff-color': difficulty.color, '--diff-rgb': difficulty.colorRgb }}
+    >
       <div className={styles.orb1} />
       <div className={styles.orb2} />
 
-      {/* Icon */}
+      {/* Rank icon */}
       <div className={styles.iconWrapper}>
         <span className={styles.rankEmoji}>{rank.emoji}</span>
         <div className={styles.iconRing} />
@@ -68,6 +64,13 @@ const GameOver = ({ retry, score }) => {
 
       <div className={styles.rankBadge} style={{ '--rank-color': rank.color }}>
         {rank.label}
+      </div>
+
+      {/* Difficulty pill */}
+      <div className={styles.diffPill}>
+        <span>{difficulty.emoji}</span>
+        <span>Dificuldade: <strong>{difficulty.label}</strong></span>
+        <span className={styles.multTag}>×{difficulty.scoreMultiplier}</span>
       </div>
 
       {/* Score card */}
@@ -80,13 +83,18 @@ const GameOver = ({ retry, score }) => {
       {/* Stats */}
       <div className={styles.stats}>
         <div className={styles.statItem}>
-          <span className={styles.statNum}>{Math.floor(score / 100)}</span>
+          <span className={styles.statNum}>{wordsGuessed}</span>
           <span className={styles.statLabel}>Palavras</span>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
-          <span className={styles.statNum}>{score > 0 ? '100' : '0'}</span>
+          <span className={styles.statNum}>{ptsPerWord}</span>
           <span className={styles.statLabel}>Pts/Palavra</span>
+        </div>
+        <div className={styles.statDivider} />
+        <div className={styles.statItem}>
+          <span className={styles.statNum}>{difficulty.lives}</span>
+          <span className={styles.statLabel}>Vidas/Rnd</span>
         </div>
       </div>
 
