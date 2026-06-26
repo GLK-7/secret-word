@@ -1,5 +1,7 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './Game.module.css';
+
+const MAX_GUESSES = 3;
 
 const Game = ({
   verifyLetter,
@@ -12,7 +14,25 @@ const Game = ({
   score,
 }) => {
   const [letter, setLetter] = useState('');
+  const [shakeInput, setShakeInput] = useState(false);
+  const [lastWrong, setLastWrong] = useState(null);
   const letterInputRef = useRef(null);
+
+  // Focus input on mount
+  useEffect(() => {
+    letterInputRef.current?.focus();
+  }, []);
+
+  // Detect new wrong letter to trigger shake
+  useEffect(() => {
+    if (wrongLetters.length > 0) {
+      const newest = wrongLetters[wrongLetters.length - 1];
+      setLastWrong(newest);
+      setShakeInput(true);
+      const t = setTimeout(() => setShakeInput(false), 500);
+      return () => clearTimeout(t);
+    }
+  }, [wrongLetters]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,30 +40,69 @@ const Game = ({
     letterInputRef.current.focus();
     setLetter('');
   };
+
+  // Build heart/life icons
+  const livesArray = Array.from({ length: MAX_GUESSES }, (_, i) => i < guesses);
+
+  // Category emoji map
+  const categoryEmoji = {
+    carro: '🚗',
+    fruta: '🍎',
+    corpo: '🫀',
+    computador: '💻',
+    programação: '⌨️',
+    alimento: '🍽️',
+  };
+  const emoji = categoryEmoji[pickedCategory] ?? '🎯';
+
   return (
     <div className={styles.game}>
-      <p className={styles.points}>
-        <span>Pontuação: {score}</span>
-      </p>
-      <h1>Adivinhe a palavra:</h1>
-      <h3 className={styles.tip}>
-        Dica sobre a palavra: <span>{pickedCategory}</span>
-      </h3>
-      <p>Você ainda tem {guesses} tentativa(s).</p>
+      {/* Header strip */}
+      <div className={styles.header}>
+        <div className={styles.scoreBox}>
+          <span className={styles.scoreLabel}>Pontuação</span>
+          <span className={styles.scoreValue}>{score}</span>
+        </div>
+
+        <div className={styles.livesBox}>
+          {livesArray.map((alive, i) => (
+            <span
+              key={i}
+              className={`${styles.heart} ${alive ? styles.heartAlive : styles.heartDead}`}
+            >
+              {alive ? '❤️' : '🖤'}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Category badge */}
+      <div className={styles.categoryBadge}>
+        <span className={styles.categoryEmoji}>{emoji}</span>
+        <span className={styles.categoryText}>{pickedCategory}</span>
+      </div>
+
+      <h1 className={styles.title}>Adivinhe a palavra</h1>
+
+      {/* Word display */}
       <div className={styles.wordContainer}>
-        {letters.map((letter, i) =>
-          guessedLetters.includes(letter) ? (
-            <span key={i} className={styles.letter}>
-              {letter}
+        {letters.map((l, i) =>
+          guessedLetters.includes(l) ? (
+            <span key={i} className={`${styles.letter} ${styles.letterReveal}`}>
+              {l}
             </span>
           ) : (
-            <span key={i} className={styles.blankSquare}></span>
+            <span key={i} className={styles.blankSquare}>
+              <span className={styles.blankDot} />
+            </span>
           )
         )}
       </div>
-      <div className={styles.letterContainer}>
-        <p>Tente adivinhar uma letra da palavra</p>
-        <form onSubmit={handleSubmit}>
+
+      {/* Input section */}
+      <div className={styles.inputSection}>
+        <p className={styles.inputLabel}>Digite uma letra</p>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="text"
             name="letter"
@@ -52,16 +111,55 @@ const Game = ({
             onChange={(e) => setLetter(e.target.value)}
             value={letter}
             ref={letterInputRef}
+            className={`${styles.letterInput} ${shakeInput ? styles.shake : ''}`}
+            autoComplete="off"
+            autoCapitalize="none"
+            placeholder="?"
           />
-          <button>Jogar!</button>
+          <button type="submit" className={styles.guessButton}>
+            Tentar
+          </button>
         </form>
       </div>
-      <div className={styles.wrongLettersContainer}>
-        <p>Letras já utilizadas:</p>
-        {wrongLetters.map((letter, i) => (
-          <span key={i}>{letter}, </span>
-        ))}
+
+      {/* Wrong letters */}
+      <div className={styles.wrongSection}>
+        <p className={styles.wrongLabel}>Letras erradas:</p>
+        <div className={styles.wrongLetters}>
+          {wrongLetters.length === 0 ? (
+            <span className={styles.noWrong}>Nenhuma ainda</span>
+          ) : (
+            wrongLetters.map((l, i) => (
+              <span
+                key={i}
+                className={`${styles.wrongBadge} ${l === lastWrong ? styles.wrongNew : ''}`}
+              >
+                {l.toUpperCase()}
+              </span>
+            ))
+          )}
+        </div>
       </div>
+
+      {/* Progress bar */}
+      <div className={styles.progressBar}>
+        <div
+          className={styles.progressFill}
+          style={{
+            width: `${
+              letters.length > 0
+                ? (guessedLetters.filter((l) => letters.includes(l)).length /
+                    [...new Set(letters)].length) *
+                  100
+                : 0
+            }%`,
+          }}
+        />
+      </div>
+      <p className={styles.progressLabel}>
+        {guessedLetters.filter((l) => letters.includes(l)).length} /{' '}
+        {[...new Set(letters)].length} letras encontradas
+      </p>
     </div>
   );
 };

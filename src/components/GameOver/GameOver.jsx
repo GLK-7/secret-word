@@ -1,27 +1,98 @@
+import { useEffect, useRef } from 'react';
 import styles from './GameOver.module.css';
 
 const GameOver = ({ retry, score }) => {
+  const containerRef = useRef(null);
+
+  // Confetti burst on mount
+  useEffect(() => {
+    const colors = ['#a855f7', '#ec4899', '#06b6d4', '#facc15', '#22c55e'];
+    const container = containerRef.current;
+    if (!container) return;
+
+    const PIECE_COUNT = 60;
+    const pieces = [];
+
+    for (let i = 0; i < PIECE_COUNT; i++) {
+      const piece = document.createElement('div');
+      piece.className = styles.confetti;
+
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const isCircle = Math.random() > 0.5;
+      const size = Math.random() * 8 + 5;
+
+      piece.style.cssText = `
+        position: absolute;
+        width: ${size}px;
+        height: ${isCircle ? size : size * 0.6}px;
+        background: ${color};
+        border-radius: ${isCircle ? '50%' : '2px'};
+        left: ${Math.random() * 100}%;
+        top: -10px;
+        opacity: 1;
+        pointer-events: none;
+        transform: rotate(${Math.random() * 360}deg);
+        animation: confettiFall ${1.5 + Math.random() * 2}s ease-in ${Math.random() * 0.8}s forwards;
+      `;
+
+      container.appendChild(piece);
+      pieces.push(piece);
+    }
+
+    return () => pieces.forEach((p) => p.remove());
+  }, []);
+
+  const getRank = (s) => {
+    if (s >= 800) return { emoji: '👑', label: 'Mestre!', color: '#facc15' };
+    if (s >= 400) return { emoji: '🔥', label: 'Incrível!', color: '#fb923c' };
+    if (s >= 200) return { emoji: '⭐', label: 'Bom jogo!', color: '#a855f7' };
+    if (s >= 100) return { emoji: '🎯', label: 'Continue!', color: '#06b6d4' };
+    return { emoji: '💪', label: 'Tente mais!', color: '#94a3b8' };
+  };
+
+  const rank = getRank(score);
+
   return (
-    <div className={styles.gameOver}>
-      {/* SVG representando o fim de jogo */}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 256 256"
-        className={styles.gameOverIcon}
-      >
-        <path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82ZM128,192a12,12,0,1,1,12-12A12,12,0,0,1,128,192Zm8-48.72V144a8,8,0,0,1-16,0v-8a8,8,0,0,1,8-8c13.23,0,24-9,24-20s-10.77-20-24-20-24,9-24,20v4a8,8,0,0,1-16,0v-4c0-19.85,17.94-36,40-36s40,16.15,40,36C168,125.38,154.24,139.93,136,143.28Z"></path>
-      </svg>
+    <div className={styles.gameOver} ref={containerRef}>
+      {/* Glow orbs */}
+      <div className={styles.orb1} />
+      <div className={styles.orb2} />
 
-      <h1>Fim de Jogo!</h1>
-
-      {/* Card de pontuação final */}
-      <div className={styles.scoreCard}>
-        <h2>
-          A sua pontuação foi: <span>{score}</span>
-        </h2>
+      {/* Icon */}
+      <div className={styles.iconWrapper}>
+        <span className={styles.rankEmoji}>{rank.emoji}</span>
+        <div className={styles.iconRing} />
       </div>
 
-      <button onClick={retry}>Reiniciar o jogo</button>
+      <h1 className={styles.title}>Fim de Jogo!</h1>
+
+      <div className={styles.rankBadge} style={{ '--rank-color': rank.color }}>
+        {rank.label}
+      </div>
+
+      {/* Score card */}
+      <div className={styles.scoreCard}>
+        <p className={styles.scoreLabel}>Pontuação Final</p>
+        <p className={styles.scoreValue}>{score}</p>
+        <p className={styles.scorePoints}>pontos</p>
+      </div>
+
+      {/* Stats */}
+      <div className={styles.stats}>
+        <div className={styles.statItem}>
+          <span className={styles.statNum}>{Math.floor(score / 100)}</span>
+          <span className={styles.statLabel}>Palavras</span>
+        </div>
+        <div className={styles.statDivider} />
+        <div className={styles.statItem}>
+          <span className={styles.statNum}>{score > 0 ? '100' : '0'}</span>
+          <span className={styles.statLabel}>Pts/Palavra</span>
+        </div>
+      </div>
+
+      <button onClick={retry} className={styles.retryBtn}>
+        🔄 Jogar Novamente
+      </button>
     </div>
   );
 };

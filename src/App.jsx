@@ -21,7 +21,6 @@ const guessesQty = 3;
 
 function App() {
   const [gameStage, setGameStage] = useState(stages[0].name);
-  console.log(gameStage)
   const [words] = useState(wordsList);
 
   const [pickedWord, setPickedWord] = useState('');
@@ -120,8 +119,6 @@ function App() {
       // add score
       setScore((actualScore) => (actualScore += 100));
 
-      // restart game with new word
-      console.log("recomeçou")
       startGame();
     }
   }, [guessedLetters, letters, startGame, gameStage]);

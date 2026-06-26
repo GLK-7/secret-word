@@ -1,162 +1,346 @@
-/* Container da palavra */
-.wordContainer {
-  margin: 1.5em;
-  padding: 0.5em;
-  border: 20px solid #222831;
+.game {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease;
+  gap: 1.2rem;
+  padding: 2rem 2.5rem 2.5rem;
+  max-width: 640px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  animation: fadeInUp 0.5s ease both;
+  position: relative;
+  overflow: hidden;
 }
 
-/* Letras e quadrados em branco */
-.letter,
-.blankSquare {
-  font-size: 70px;
-  line-height: 1.5;
-  border: 3px solid #ffd700; /* Amarelo dourado */
-  height: 100px;
-  width: 100px;
+.game::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #a855f7, #ec4899, #06b6d4);
+  background-size: 200% 100%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.scoreBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+}
+
+.scoreLabel {
+  font-size: 0.7rem;
   text-transform: uppercase;
-  background-color: #222831; /* Preto suave */
-  color: #ffffff;
-  font-weight: bold;
+  letter-spacing: 1.5px;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.scoreValue {
+  font-size: 1.6rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #22c55e, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: 'Poppins', sans-serif;
+}
+
+.livesBox {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.heart {
+  font-size: 1.4rem;
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.6));
+}
+
+.heartAlive {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.heartDead {
+  filter: grayscale(1) brightness(0.5);
+  transform: scale(0.85);
+}
+
+/* Category badge */
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(236,72,153,0.2));
+  border: 1px solid rgba(168,85,247,0.35);
+  border-radius: 50px;
+  padding: 0.4rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #c084fc;
+  letter-spacing: 0.5px;
+}
+
+.categoryEmoji {
+  font-size: 1rem;
+}
+
+.categoryText {
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* Title */
+.title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin: 0;
+}
+
+/* Word container */
+.wordContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.2rem 1rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.07);
+  width: 100%;
+}
+
+/* Revealed letter */
+.letter {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0.1em;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  width: 56px;
+  height: 56px;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 12px;
+  color: #0f0c29;
+  background: linear-gradient(135deg, #a855f7, #ec4899);
+  box-shadow: 0 4px 15px rgba(168,85,247,0.5);
+  border: 2px solid rgba(255,255,255,0.3);
 }
 
-.letter:hover,
-.blankSquare:hover {
-  background-color: #ffd700;
-  color: #222831;
-  transform: translateY(-5px);
+.letterReveal {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
 
-/* Container de letras */
-.letterContainer p {
-  margin-bottom: 1.2em;
-  font-size: 1.2em;
-  color: #f1f1f1;
-  text-align: center;
-}
-
-/* Estilizando o formulário */
-.letterContainer form {
+/* Blank square */
+.blankSquare {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 1em;
+  align-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
 }
 
-/* Entrada de letras */
-.letterContainer input {
-  height: 50px;
-  width: 50px;
-  font-size: 2em;
+.blankDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+}
+
+/* Input section */
+.inputSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.inputLabel {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.form {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.letterInput {
+  width: 64px;
+  height: 64px;
+  font-size: 1.8rem;
   text-align: center;
-  margin-right: 1em;
-  border: 2px solid #ffd700;
-  border-radius: 0px;
-  background-color: #222831;
-  color: #ffffff;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  text-transform: uppercase;
+  font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  color: #f8fafc;
+  transition: all 0.3s ease;
+  caret-color: #a855f7;
 }
 
-.letterContainer input:focus {
-  border-color: #4caf50;
-  box-shadow: 0px 0px 8px rgba(76, 175, 80, 0.8);
+.letterInput::placeholder {
+  color: rgba(255,255,255,0.2);
+}
+
+.letterInput:focus {
   outline: none;
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.1);
+  box-shadow: 0 0 0 3px rgba(168,85,247,0.25), 0 0 20px rgba(168,85,247,0.3);
 }
 
-/* Título */
-.game h1 {
-  font-size: 3em;
-  font-family: 'Roboto', sans-serif;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  margin-bottom: 0.5em;
+.shake {
+  animation: shake 0.4s ease both;
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.25) !important;
 }
 
-/* Estilo de pontuação */
-.points span {
-  font-weight: bold;
-  font-size: 1.5em;
-  color: #4caf50;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+.guessButton {
+  height: 64px;
+  padding: 0 2rem;
+  font-size: 0.95rem;
 }
 
-/* Dica */
-.tip span {
-  color: #ffd700; /* Amarelo dourado */
-  font-size: 1.2em;
+/* Wrong letters section */
+.wrongSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wrongLabel {
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  background-color: #222831;
-  padding: 0.3em 0.6em;
-  border-radius: 5px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4);
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .game {
-    padding: 1.5em;
-  }
-
-  .game h1 {
-    font-size: 2.5em;
-  }
-
-  .letter,
-  .blankSquare {
-    font-size: 50px;
-    height: 80px;
-    width: 80px;
-  }
-
-  .letterContainer input {
-    height: 40px;
-    width: 40px;
-    font-size: 1.5em;
-  }
+.wrongLetters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
 }
 
+.noWrong {
+  color: #475569;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.wrongBadge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-family: 'Poppins', sans-serif;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #f87171;
+  transition: all 0.3s ease;
+}
+
+.wrongNew {
+  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+  background: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+/* Progress bar */
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #06b6d4);
+  border-radius: 3px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progressLabel {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-top: -0.5rem;
+}
+
+/* Responsive */
 @media (max-width: 480px) {
-  /* Ajustes para dispositivos móveis */
   .game {
-    padding: 1em;
-  }
-
-  .game h1 {
-    font-size: 5vw;
+    padding: 1.5rem 1.2rem;
+    border-radius: 20px;
+    gap: 1rem;
   }
 
   .letter,
   .blankSquare {
-    font-size: 4vw;
-    height: 7vw;
-    width: 7vw;
+    width: 42px;
+    height: 42px;
+    font-size: 1.2rem;
+    border-radius: 10px;
   }
 
-  .letterContainer input {
-    height: 10.5vw;
-    width: 10.5vw;
-    font-size: 3.5vw;
+  .letterInput {
+    width: 54px;
+    height: 54px;
+    font-size: 1.5rem;
   }
-  /* Dica */
-.tip span {
 
-  font-size: 3.5vw;
+  .guessButton {
+    height: 54px;
+    padding: 0 1.2rem;
+    font-size: 0.85rem;
+  }
 
-}
+  .title {
+    font-size: 1.3rem;
+  }
 
-.wordContainer {
-  border: 2.5vw solid #222831;}
+  .scoreValue {
+    font-size: 1.3rem;
+  }
 }
